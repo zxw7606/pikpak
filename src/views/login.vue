@@ -26,6 +26,7 @@
             <a target="_blank" href="https://i.mypikpak.com/v1/file/center/account/v1/password/?type=forget_password&locale=zh-cn" class="forget-password">忘记密码</a>
             <!--<router-link to="/register" class="register">注册</router-link>-->
             <a href="javascript:;" @click="getApk">去下载注册得5天VIP</a>
+            <a href="javascript:;" @click="gotoSettingProxy">代理设置</a>
           </n-form-item>
         </n-form>
         <div class="login-other">
@@ -96,6 +97,12 @@ const loginPost = () => {
       loading.value = false
     })
 }
+
+const gotoSettingProxy = () => {
+  console.log(route.query.redirect);
+  router.push(('/setting') + '')
+}
+
 const remember = ref(false)
 const dialog = useDialog()
 const showMessage = () => {

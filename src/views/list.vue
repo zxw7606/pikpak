@@ -169,6 +169,14 @@
               </template>
             </n-space>
           </n-form-item>
+          <n-form-item label="快捷添加菜单：">
+            <n-space>
+              <template v-for="(item, key) in buildInMenuTextList" :key="key">
+                <n-button @click="addBuildInUserMenu(item)">{{item.name}}</n-button>
+              </template>
+            </n-space>
+          </n-form-item>
+
           <n-form-item label="自定义菜单名称：">
             <n-input v-model:value="newMenu.name"></n-input>
           </n-form-item>
@@ -1036,6 +1044,28 @@ import axios from 'axios';
     content: '',
     name: ''
   })
+
+  // 内建自定义菜单 https://www.tjsky.net/tutorial/220#i-8
+  const buildInMenuTextList = ref([
+    { type: 'a',
+      content: 'intent:{{web_content_link}}#Intent;type=video/any;package=com.mxtech.videoplayer.pro;S.title="{{name}}";end;',
+      name: '调用MXplayer播放在线视频（安卓）'
+    },
+    { type: 'a',
+      content: 'intent:{{web_content_link}}#Intent;type=video/any;package=com.mxtech.videoplayer.pro;S.title="{{name}}";end;',
+      name: '推送到AriaNG下载'
+    },
+    { type: 'a',
+      content: 'potplayer://{{web_content_link}}',
+      name: '调用Potplayer播放在线视频（PC）'
+    },
+    { type: 'a',
+      content: 'curl -L "{{web_content_link}}" --output "{{name}}"',
+      name: '生成cURl下载链接'
+    }
+  ]);
+
+
   const showUserMenu = ref(false)
   const userMenu = ref<typeof newMenu.value[]>([])
   const addUserMenu = () => {
@@ -1046,6 +1076,9 @@ import axios from 'axios';
       name: ''
     }
     window.localStorage.setItem('pikpakUserMenu', JSON.stringify(userMenu.value))
+  }
+  const addBuildInUserMenu = (item: any) => {
+    newMenu.value = JSON.parse(JSON.stringify(item))
   }
   const removeUserMenu = (key:number) => {
     userMenu.value.splice(key, 1)

@@ -1,9 +1,10 @@
 <template>
+  <!-- https://www.naiveui.com/zh-CN/os-theme/components/layout#Layout-Sider-Props -->
   <n-layout has-sider v-resize @resize="handleResize">
     <n-layout-sider 
-      :content-style="{display: 'flex', flexDirection: 'column'}"
+
       collapse-mode="width"
-      :collapsed-width="0"
+      :collapsed-width="50"
       :width="240"
       show-trigger="bar"
       :collapsed="collapsed"
