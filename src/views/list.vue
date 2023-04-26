@@ -29,7 +29,7 @@
       </div>
     </div>
     <n-scrollbar style="max-height: calc(100vh - 190px);" @scroll="scrollHandle">
-      <n-data-table v-model:checked-row-keys="checkedRowKeys"  :row-key="row => row.id" :data="filesList" size="small" :columns="columns" :bordered="false"></n-data-table>
+      <n-data-table v-model:checked-row-keys="checkedRowKeys"  :row-key="row => row.id" :data="filesList" size="small" :columns="columns" :bordered="false" row-class-name="row-class-info"></n-data-table>
       <div class="loading" v-if="loading">
         <n-spin size="small" />加载中
       </div>
@@ -109,10 +109,12 @@
         </template>
       </n-card>
     </n-modal>
+
+    <!-- 视频模块 -->
     <n-modal v-model:show="showVideo">
       <n-card style="width: 100vw; height: 100vh;" :title="fileInfo ? fileInfo.name : '视频'">
         <template #header-extra>
-          <n-icon @click="showVideo = false">
+          <n-icon @click="showVideo = false" :color=modalOptions.icon_color :size=modalOptions.size>
             <circle-x></circle-x>
           </n-icon>
         </template>
@@ -126,7 +128,7 @@
     <n-modal v-model:show="showImage">
       <n-card style="width: 100vw; height: 100vh;" :title="fileInfo ? fileInfo.name : '图片'">
         <template #header-extra>
-          <n-icon @click="showImage = false">
+          <n-icon @click="showImage = false" :color=modalOptions.icon_color :size=modalOptions.size>
             <circle-x></circle-x>
           </n-icon>
         </template>
@@ -139,7 +141,7 @@
     <n-modal v-model:show="showName">
       <n-card style="width: 600px;" title="修改名称">
         <template #header-extra>
-          <n-icon @click="showName = false">
+          <n-icon @click="showName = false" :color=modalOptions.icon_color :size=modalOptions.size>
             <circle-x></circle-x>
           </n-icon>
         </template>
@@ -157,7 +159,7 @@
           自定义菜单 <a href="https://www.tjsky.net/?p=220#i-8" target="_blank"> <n-icon style="vertical-align: middle;" size="20" color="#d03050"><zoom-question></zoom-question></n-icon> </a>
         </template>
         <template #header-extra>
-          <n-icon @click="showUserMenu = false">
+          <n-icon @click="showUserMenu = false" :color=modalOptions.icon_color :size=modalOptions.size>
             <circle-x></circle-x>
           </n-icon>
         </template>
@@ -258,6 +260,13 @@ import ClipboardJS from 'clipboard'
 import streamSaver from 'streamsaver'
 import { DropdownMixedOption } from 'naive-ui/lib/dropdown/src/interface'
 import axios from 'axios';
+import { reduce, size } from 'lodash';
+
+  const modalOptions = ref({
+     icon_color:"red",
+     size:30
+  })
+
   const filesList = ref()
   const route = useRoute()
   const router = useRouter()
@@ -577,6 +586,27 @@ import axios from 'axios';
       // Chrome, Safari, Firefox 4+, Opera 12+ , IE 9+
       return '还有待下载文件?'
     }
+
+
+        // 增强视频音频模态框（防止）跳转
+      router.beforeEach((to, from, next) => {
+      if (showImage.value || showVideo.value) {
+        // 如果 modal 可见，则阻止路由跳转
+        next(false);
+
+        if(showImage.value){
+          showImage.value = false;
+        }
+
+        if(showVideo.value){
+          if(showVideo.value){
+            showVideo.value = false;
+          }
+        }
+      } else {
+        next();
+      }
+    });
   })
   const fileInfo = ref()
   const getFile = (id:string) => {
@@ -1247,6 +1277,8 @@ import axios from 'axios';
 .file-info .title {
   flex: 1;
   width: 0;
+  min-width: 300px;
+  white-space: normal;
 }
 .file-info .action {
   display: none;
@@ -1325,6 +1357,12 @@ import axios from 'axios';
 }
 .tool-icon {
   font-size: 18px;
+}
+
+.row-class-info {
+  /* display: flex;
+  white-space: normal;
+  flex-wrap: wrap; */
 }
 @keyframes move-down {
   0% {
