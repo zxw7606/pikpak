@@ -86,7 +86,7 @@ const copy = (value:string) => {
 const invitationCode = ref()
 // 生成邀请码
 const getInviteCode = async () => {
-	http.get('https://api-drive.mypikpak.com/vip/v1/activity/inviteCode')
+  http.get('https://api-drive.mypikpak.com/vip/v1/activity/inviteCode')
     .then((res:any) => {
       invitationCode.value = res.data?.code
     })
