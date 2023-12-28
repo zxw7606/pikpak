@@ -672,8 +672,13 @@ import { reduce, size } from 'lodash';
             url: {
               url: url
             },
-            params: {"from":"file"},
-            folder_type: "DOWNLOAD"
+            // 下载路径错误问题 
+            // params: {"from":"file"},
+            params: {
+              "with_thumbnail": "true",
+              "from": "manual"
+            }
+            // folder_type: "DOWNLOAD"
           }
         } else {
           hasHash = true
